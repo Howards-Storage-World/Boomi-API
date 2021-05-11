@@ -5,6 +5,7 @@ import styles from './menuContent.module.css';
 const navigation_links = [
   { name: 'Home', path: "/" },
   { name: 'Documentation', path: "/documentation" },
+  { name: 'Implementations', path: "/implementations" },
   // { name: 'Test', path: "/test" },
 ];
 const MenuContent: FC<{ closeCallback: () => void, links?: { name: string, path: string }[] }> = ({ closeCallback, links = navigation_links }) => {
