@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Axios from "axios";
 import Layout from '@components/layout';
 import Table from "@components/tools/Table";
@@ -16,12 +16,26 @@ const Implementation: FC<{ name: string }> = ({ name, children }) => {
   )
 }
 
-function useLoad() {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [response, setResponse] = useState<any>(undefined);
-  const [error, setError] = useState<any>(undefined);
+interface StockLevel {
+  "product-code": string,
+  "quantity": number,
+}
+interface StoreStockLevel {
+  "location-id": string,
+  "location-name": string,
+  "availability": StockLevel[]
+}
 
-  async function load(fn: () => Promise<any>) {
+interface StockLevelResponse {
+  results: StoreStockLevel[]
+}
+
+function useLoad<T>() {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [response, setResponse] = useState<T | undefined>(undefined);
+  const [error, setError] = useState<string | Error | undefined>(undefined);
+
+  async function load(fn: () => Promise<T>) {
     setLoading(true);
     try {
       const payload = await fn();
@@ -34,18 +48,18 @@ function useLoad() {
       setResponse(undefined);
     }
   }
-
   return { response, error, isLoading: loading, load };
 }
 
-
+// eslint-disable-next-line max-lines-per-function
 const StockLookup: FC = () => {
   const boomiAPI = useBoomiAPI();
   const [stores, setStores] = useState("12100 12077");
   const [products, setProducts] = useState("LTW9141 LTW9252 LTW9135");
-  const { response, error, isLoading, load } = useLoad();
+  const { response, error, isLoading, load } = useLoad<StockLevelResponse>();
 
-  function loader() {
+  function loader(): Promise<StockLevelResponse> {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       try {
         const parser = (input: string) => { return input.split(/\s*,\s*|\s+/).filter((item) => (item != "") && (item)); };
@@ -68,8 +82,8 @@ const StockLookup: FC = () => {
 
   const data = React.useMemo(() => {
     if (response && !error) {
-      const SoH = response?.results.map((store: any) => {
-        return { storeID: store["location-id"], storeName: store["location-name"], ...store.availability.reduce((obj: any, item: any) => { obj[item["product-code"]] = item["quantity"]; return obj; }, {}) };
+      const SoH = response?.results.map((store: StoreStockLevel) => {
+        return { storeID: store["location-id"], storeName: store["location-name"], ...store.availability.reduce((obj: Record<string, number>, item: StockLevel) => { obj[item["product-code"]] = item["quantity"]; return obj; }, {}) };
       })
       return SoH;
     }
@@ -87,7 +101,7 @@ const StockLookup: FC = () => {
       }
 
       for (const item of products.keys()) {
-        base.push({ Header: item, accessor: item });
+        base.push({ Header: item as string, accessor: item as string });
       }
       return base;
     }

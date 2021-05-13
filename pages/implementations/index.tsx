@@ -14,7 +14,8 @@ export interface ImplementationLink {
   name: string
   path: string
   last_updated?: string
-};
+}
+
 const navigation_links: ImplementationLink[] = [
   { name: 'Stock Lookup', path: "/stock-lookup", last_updated: "2021-05-13" },
 ];

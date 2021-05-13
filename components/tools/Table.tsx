@@ -1,9 +1,10 @@
+/* eslint-disable max-lines-per-function, @typescript-eslint/no-explicit-any */
 import { FC } from "react";
-import { useTable, useSortBy, useBlockLayout, useResizeColumns } from 'react-table';
+import { useTable, useSortBy, useBlockLayout, useResizeColumns, Column } from 'react-table';
 
 import styles from "@components/tools/Table.module.css";
 
-const Table: FC<{ columns: any, data: any} > = ({ columns, data }) => {
+const Table: FC<{ columns: Column<any>[], data: any[]} > = ({ columns, data }) => {
     const {
       getTableProps,
       getTableBodyProps,
@@ -19,10 +20,6 @@ const Table: FC<{ columns: any, data: any} > = ({ columns, data }) => {
       useSortBy,
       useResizeColumns
     )
-  
-    // We don't want to render all 2000 rows for this example, so cap
-    // it at 20 for this use case
-    const firstPageRows = rows.slice(0, 20)
   
     return (
       <table {...getTableProps()} className={styles.table}>
@@ -57,8 +54,8 @@ const Table: FC<{ columns: any, data: any} > = ({ columns, data }) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {firstPageRows.map(
-            (row, i) => {
+          {rows.map(
+            (row) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}  className={styles.tr}>

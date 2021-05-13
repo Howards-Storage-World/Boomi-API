@@ -6,14 +6,14 @@ export class BoomiAPI {
   private _port: string;
   private _basePath: string;
 
-  constructor(protocol: string, host: string, port: string | number, basePath: string = "") {
+  constructor(protocol: string, host: string, port: string | number, basePath = "") {
     this._protocol = protocol;
     this._host = host;
     this._port = port.toString();
     this._basePath = basePath;
   }
 
-  public get uri() {
+  public get uri(): string {
     return `${this._protocol}://${this._host}:${this._port}${this._basePath}`;
   }
 }
@@ -23,7 +23,7 @@ export interface BoomiAPIContext {
   setEndpoint: (endpoint: BoomiAPI) => void
 }
 
-export const useBoomiAPI = () => {
+export const useBoomiAPI = (): BoomiAPIContext => {
   return useContext(context);
 };
 
@@ -36,6 +36,7 @@ const useProvideBoomiAPI = () => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const context: React.Context<BoomiAPIContext> = React.createContext<any>({});
 
 export const BoomiAPIProvider: FC = ({ children }) => {
