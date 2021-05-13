@@ -22,7 +22,8 @@
       "@components/*": ["components/*"], 
       "@lib/*": ["lib/*"],
       "@styles/*": ["styles/*"]
-    }
+    },
+    "downlevelIteration": true
   },
   "exclude": [
     "node_modules"
