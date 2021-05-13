@@ -9,8 +9,8 @@ const Implementation: FC<{ name: string }> = ({ name, children }) => {
   const meta = { title: name, description: `An implmentation of the HSW's Boomi API ${name} Functionality` };
 
   return (
-    <Layout title={`Implementation: ${name} | HSW Boomi API`} meta={meta}>
-        <h2 className={utilStyles.headingLg}>{name} Implementations</h2>
+    <Layout title={`Implementation: ${name} | HSW Boomi API`} meta={meta} style={{}}>
+        <h2 className={utilStyles.headingLg} style={{margin: "auto", maxWidth: "36rem"}}>{name} Implementations</h2>
         {children}
     </Layout>
   )
@@ -124,7 +124,7 @@ const StockLookup: FC = () => {
   // console.log(response)
   return (
     <Implementation name="Stock Lookup">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} style={{margin: "auto", maxWidth: "20rem"}}>
         <label>Stores: </label><input type="text" className={utilStyles.input} value={stores} onChange={onChangeStores} placeholder="Store IDs seperated by spaces" style={{"width": "200px"}} /><br/>
         <label>Products: </label><input type="text" className={utilStyles.input} value={products} onChange={onChangeProducts} placeholder="Item Numbers seperated by spaces" style={{"width": "225px"}} /><br/>
         <input type="submit" className={utilStyles.input} value="Check Availabilities" />
@@ -133,7 +133,7 @@ const StockLookup: FC = () => {
       {isLoading ? 
         <h2 className={utilStyles.headingMd}>Loading your data...</h2>
       : response !== undefined ?
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={data} style={{margin: "auto", maxWidth: "100%"}}/>
         :
         <><h2 className={utilStyles.headingMd}>Error:</h2><p>{error}</p></>
       }
