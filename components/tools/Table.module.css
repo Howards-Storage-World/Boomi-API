@@ -1,0 +1,42 @@
+/* padding: 1rem; */
+
+
+/* Table Rounding */
+.table {
+    display: inline-block;
+    border-spacing: 0;
+    border: 1px solid whitesmoke;
+    border-radius: 10px;
+}
+
+.table .tr:last-child .td {
+    border-bottom: 0;
+}
+
+.th, .td {
+    margin: 0;
+    padding: 0.5rem;
+    border-bottom: 1px solid whitesmoke;
+    border-right: 1px solid whitesmoke;
+    position: relative;
+}
+.th:last-child, .td:last-child {
+    border-right: 0;
+}
+
+.th .resizer, .td .resizer {
+    display: inline-block;
+    background: blue;
+    width: 10px;
+    height: 80%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(50%) translateY(10%);
+    z-index: 1;
+    touch-action:none;
+}
+
+.th .resizer.isResizing, .td .resizer.isResizing {
+    background: red;
+}

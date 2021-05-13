@@ -70,3 +70,30 @@
 .flexColumn {
   flex: 1;
 }
+
+.input[type="submit"] {
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 5px;
+  padding: 6px;
+  background-color: hsl(240, 5%, 20%);
+  color: whitesmoke;
+}
+
+.input[type="submit"]:hover {
+  /* border: 1px solid rgba(255, 255, 255, 0.4); */
+  color: whitesmoke;
+  background-color: hsl(240, 5%, 20%);
+}
+
+.input[type="text"]:focus {
+  color: hsl(240, 5%, 20%);
+  background-color: whitesmoke;
+}
+
+.input[type="text"] {
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+  padding: 6px;
+  color: whitesmoke;
+  background-color: hsl(240, 5%, 20%);
+}
