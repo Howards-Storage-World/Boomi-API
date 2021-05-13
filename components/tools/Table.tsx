@@ -1,10 +1,10 @@
 /* eslint-disable max-lines-per-function, @typescript-eslint/no-explicit-any */
-import { FC } from "react";
+import React, { FC } from "react";
 import { useTable, useSortBy, useBlockLayout, useResizeColumns, Column } from 'react-table';
 
 import styles from "@components/tools/Table.module.css";
 
-const Table: FC<{ columns: Column<any>[], data: any[]} > = ({ columns, data }) => {
+const Table: FC<{ columns: Column<any>[], data: any[], style: React.CSSProperties } > = ({ columns, data, style = {} }) => {
     const {
       getTableProps,
       getTableBodyProps,
@@ -22,7 +22,7 @@ const Table: FC<{ columns: Column<any>[], data: any[]} > = ({ columns, data }) =
     )
   
     return (
-      <table {...getTableProps()} className={styles.table}>
+      <table {...getTableProps()} className={styles.table} style={style}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}  className={styles.tr}>
