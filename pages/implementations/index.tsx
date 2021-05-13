@@ -55,8 +55,8 @@ const Implementations: FC = () => {
           <div className={utilStyles.flexGrid}>
             <ImplementationsList links={navigation_links} style={{ maxWidth: "20rem" , padding: '0.5rem' }} />
             <section className={`${utilStyles.headingMd} ${utilStyles.flexColumn} ${utilStyles.sticky}`} style={{ maxWidth: "20rem" , padding: '0.5rem' }}>
-              <h2 className={utilStyles.headingLg}>Examples Intro</h2>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed eaque quae architecto, praesentium, sapiente ratione quia dolorum labore nobis nostrum porro vero aliquam vitae totam iste excepturi dolorem fugiat doloribus.</p>
+              <h2 className={utilStyles.headingLg}>API Implementation Examples</h2>
+              <p>These example are intended to provide a sample implementation of the Boomi API feature set. Ideally these will cover all the features (including webhooks) for testing by non-technical users and for reference when developers are consuming or implementing these API interfaces. </p>
             </section>
           </div>
         ) : (
