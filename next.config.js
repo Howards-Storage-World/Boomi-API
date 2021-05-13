@@ -25,7 +25,7 @@ module.exports = (phase, { defaultConfig }) => {
         poweredByHeader: false,
         reactStrictMode: true, // Good Practice apparently
         basePath: '/Boomi-API',
-        headers: headers,
+        // headers: headers,
     };
 
     if (phase === PHASE_DEVELOPMENT_SERVER) {
