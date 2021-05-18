@@ -1,20 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import Axios from "axios";
-import Layout from '@components/layout';
+import Implementation from '@components/implementation';
 import Table from "@components/tools/Table";
 import { useBoomiAPI } from "@components/tools/BoomiAPI";
+import { useLoad } from "@lib/hooks";
 import utilStyles from '@styles/utils.module.css';
-
-const Implementation: FC<{ name: string }> = ({ name, children }) => {
-  const meta = { title: name, description: `An implmentation of the HSW's Boomi API ${name} Functionality` };
-
-  return (
-    <Layout title={`Implementation: ${name} | HSW Boomi API`} meta={meta} style={{}}>
-        <h2 className={utilStyles.headingLg} style={{margin: "auto", maxWidth: "36rem"}}>{name} Implementations</h2>
-        {children}
-    </Layout>
-  )
-}
 
 interface StockLevel {
   "product-code": string,
@@ -28,27 +18,6 @@ interface StoreStockLevel {
 
 interface StockLevelResponse {
   results: StoreStockLevel[]
-}
-
-function useLoad<T>() {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [response, setResponse] = useState<T | undefined>(undefined);
-  const [error, setError] = useState<string | Error | undefined>(undefined);
-
-  async function load(fn: () => Promise<T>) {
-    setLoading(true);
-    try {
-      const payload = await fn();
-      setLoading(false);
-      setResponse(payload);
-      setError(undefined);
-    } catch (error) {
-      setLoading(false);
-      setError(error);
-      setResponse(undefined);
-    }
-  }
-  return { response, error, isLoading: loading, load };
 }
 
 // eslint-disable-next-line max-lines-per-function
