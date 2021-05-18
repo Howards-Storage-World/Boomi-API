@@ -13,7 +13,7 @@ const Layout: FC<{ title?: string, meta?: MetaOptions, home?: boolean, style?: R
     <Menu/>
     <div className={`${styles.container} ${className}`} style={style}>
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.webp" />
         { title && (<title>{ title }</title>) }
       </Head>
       <Meta options={meta} />
