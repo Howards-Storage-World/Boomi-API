@@ -1,20 +1,20 @@
 // eslint-disable-next-line no-undef, @typescript-eslint/no-var-requires
 const { PHASE_DEVELOPMENT_SERVER } = require('next/constants');
-const infinite_cache = { key: "Cache-Control", value: "public, max-age=9999999999, must-revalidate", };
-const headers = async () => {
-    return [
-        {
-            source: '/:all*.(svg|jpg|jpeg|png|webp)',
-            locale: false,
-            headers: [ infinite_cache, ],
-        },
-        {
-            source: '/_next/image(.*)',
-            locale: false,
-            headers: [ infinite_cache, ],
-        },
-    ];
-};
+// const infinite_cache = { key: "Cache-Control", value: "public, max-age=9999999999, must-revalidate", };
+// const headers = async () => {
+//     return [
+//         {
+//             source: '/:all*.(svg|jpg|jpeg|png|webp)',
+//             locale: false,
+//             headers: [ infinite_cache, ],
+//         },
+//         {
+//             source: '/_next/image(.*)',
+//             locale: false,
+//             headers: [ infinite_cache, ],
+//         },
+//     ];
+// };
 
 // eslint-disable-next-line max-lines-per-function, no-undef
 module.exports = (phase, { defaultConfig }) => {
