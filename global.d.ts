@@ -35,3 +35,24 @@ declare module 'react-hamburger-menu' {
   const HamburgerMenu: React.FC<IProps>
   export default HamburgerMenu
 }
+
+declare module 'react-xml-viewer' {
+  const IProps: {
+    xml: string
+    indentSize?: number
+    invalidXml?: string
+    collapsible?: boolean
+    theme?: {
+      attributeKeyColor?: string
+      attributeValueColor?: string
+      cdataColor?: string
+      commentColor?: string
+      separatorColor?: string
+      tagColor?: string
+      textColor?: string
+      overflowBreak?: boolean
+    }
+  };
+  const XMLViewer: React.FC<IProps>;
+  export default XMLViewer;
+}

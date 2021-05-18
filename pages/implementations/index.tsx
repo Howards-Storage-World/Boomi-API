@@ -13,12 +13,18 @@ const meta = {
 export interface ImplementationLink {
   name: string
   path: string
-  last_updated?: string
+  last_updated: string
 }
 
 const navigation_links: ImplementationLink[] = [
   { name: 'Stock Lookup', path: "/stock-lookup", last_updated: "2021-05-13" },
+  { name: 'Load Order', path: "/load-order", last_updated: "2021-05-18" },
 ];
+
+import { parseISO } from 'date-fns';
+navigation_links.sort((first, second) => {
+  return parseISO(second.last_updated).getTime() - parseISO(first.last_updated).getTime();
+});
 
 const ImplementationsListEntry: FC<{ link: ImplementationLink }> = ({ link: { name, path, last_updated } }) => {
   return (
@@ -28,7 +34,7 @@ const ImplementationsListEntry: FC<{ link: ImplementationLink }> = ({ link: { na
       </Link>
       <br />
       <small className={utilStyles.lightText}>
-        {last_updated ? <Date dateString={last_updated} /> : "never updated"}
+        <Date dateString={last_updated} />
       </small>
     </li>
   );
