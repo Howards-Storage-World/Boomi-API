@@ -3,25 +3,45 @@
 
 /* Table Rounding */
 .table {
-    display: inline-block;
+    display: inline-table;
     border-spacing: 0;
-    border: 1px solid whitesmoke;
-    border-radius: 10px;
 }
 
-.table .tr:last-child .td {
-    border-bottom: 0;
+.table .thead   {
+    display: block;
+    background: hsl(240, 5%, 15%);
+    border: 1px solid whitesmoke;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.table .tbody   {
+    display: block;
+    border-bottom: 1px solid whitesmoke;
+    border-left: 1px solid whitesmoke;
+    border-right: 1px solid whitesmoke;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.table .tr .td, .table .tr .th {
+    border-right: 1px solid whitesmoke;
+}
+.table .tr .td:last-of-type, .table .tr .th:last-of-type {
+    border: none;
+}
+
+.table .tbody .tr {
+    border-bottom: 1px solid whitesmoke;
+}
+.table .tbody .tr:last-of-type {
+    border: none;
 }
 
 .th, .td {
     margin: 0;
     padding: 0.5rem;
-    border-bottom: 1px solid whitesmoke;
-    border-right: 1px solid whitesmoke;
     position: relative;
-}
-.th:last-child, .td:last-child {
-    border-right: 0;
 }
 
 .th .resizer, .td .resizer {

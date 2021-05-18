@@ -23,7 +23,7 @@ const Table: FC<{ columns: Column<any>[], data: any[], style: React.CSSPropertie
   
     return (
       <table {...getTableProps()} className={styles.table} style={style}>
-        <thead>
+        <thead className={styles.thead}>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}  className={styles.tr}>
               {headerGroup.headers.map((column: any) => (
@@ -53,7 +53,7 @@ const Table: FC<{ columns: Column<any>[], data: any[], style: React.CSSPropertie
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody {...getTableBodyProps()} className={styles.tbody}>
           {rows.map(
             (row) => {
               prepareRow(row);
