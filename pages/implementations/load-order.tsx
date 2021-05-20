@@ -45,7 +45,7 @@ const StockLookup: FC = () => {
       </form>
       <br/>
       {isLoading ? 
-        <h2 className={utilStyles.headingMd}>Loading your order...</h2>
+        response !== undefined ? <h2 className={utilStyles.headingMd}>Loading your order...</h2> : <h2 className={utilStyles.headingMd}>Waiting for you to load an order...</h2>
       : response !== undefined ?
         <><h2 className={utilStyles.headingMd}>Loaded:</h2><p><XMLViewer xml={response} collapsible={true} theme={{ separatorColor: "#f5f5f5", textColor: "#d09f00" }}></XMLViewer></p></>
         :
