@@ -46,7 +46,7 @@ const ImplementationsList: FC<{ links: ImplementationLink[], style: React.CSSPro
       <h2 className={utilStyles.headingLg}>All Implementations</h2>
       <ul className={utilStyles.list}>
         {links.map(link => (
-          <ImplementationsListEntry  link={link} />
+          <ImplementationsListEntry link={link} />
         ))}
       </ul>
     </section>
