@@ -106,7 +106,7 @@ const StockLookup: FC = () => {
       : response !== undefined ?
         <Table columns={columns} data={data} style={{margin: "auto", maxWidth: "100%"}}/>
         :
-        <><h2 className={utilStyles.headingMd}>Error: {error?.toString()}</h2><IFrame content={error?.response?.data} style={{ background: "white", width: "100%"}}></IFrame></>
+        <><h2 className={utilStyles.headingMd}>Error: {error?.toString()}</h2><IFrame content={Axios.isAxiosError(error) ? error.response?.data?.toString() : "No detailed error message from the server."} style={{ background: "white", width: "100%"}}></IFrame></>
       }
       
     </Implementation>
