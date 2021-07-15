@@ -14,7 +14,7 @@ interface StockLevel {
 interface StoreStockLevel {
   "location-id": string,
   "location-name": string,
-  "availability": StockLevel[]
+  "availability"?: StockLevel[]
 }
 
 interface StockLevelResponse {
@@ -53,7 +53,14 @@ const StockLookup: FC = () => {
   const data = React.useMemo(() => {
     if (response && !error) {
       const SoH = response?.results.map((store: StoreStockLevel) => {
-        return { storeID: store["location-id"], storeName: store["location-name"], ...store.availability.reduce((obj: Record<string, number>, item: StockLevel) => { obj[item["product-code"]] = item["quantity"]; return obj; }, {}) };
+        return { 
+          storeID: store["location-id"],
+          storeName: store["location-name"],
+          ...(store.availability || []).reduce((obj: Record<string, number>, item: StockLevel) => {
+            obj[item["product-code"]] = item["quantity"];
+            return obj;
+          }, {})
+        };
       })
       return SoH;
     }
@@ -65,7 +72,7 @@ const StockLookup: FC = () => {
     if (response && !error) {
       const products = new Set();
       for (const store of response?.results) {
-        for (const item of store.availability) {
+        for (const item of store.availability || []) {
           products.add(item["product-code"]);
         }
       }
