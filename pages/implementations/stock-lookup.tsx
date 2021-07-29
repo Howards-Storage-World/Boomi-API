@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import Axios, { AxiosError } from "axios";
 import Implementation from '@components/implementation';
-import Table from "@components/tools/Table";
+import Table, { headers } from "@components/tools/Table";
 import { useBoomiAPI } from "@components/tools/BoomiAPI";
 import { useLoad } from "@lib/hooks";
 import utilStyles from '@styles/utils.module.css';
 import IFrame from "@components/tools/iframe";
+import Loading from '@components/tools/loading';
 
 interface StockLevel {
   "product-code": string,
@@ -29,77 +30,65 @@ const StockLookup: FC = () => {
   const { response, error, isLoading, load } = useLoad<StockLevelResponse, string | Error | AxiosError>();
 
   function loader(): Promise<StockLevelResponse> {
-    // eslint-disable-next-line no-async-promise-executor
-    return new Promise(async (resolve, reject) => {
-      try {
-        const parser = (input: string) => { return input.split(/\s*,\s*|\s+/).filter((item) => (item != "") && (item)); };
-        const payload = {
-          "location-ids": parser(stores),
-          "SKUs": parser(products)
-        }
-        const resp = await Axios.post(`${boomiAPI.endpoint.uri}/ws/simple/getProductAvailability`, payload)
-        resolve(resp.data);
-      } catch (err) {
-        reject(err);
-      }
-    });
+    const parser = (input: string) => { return input.split(/\s*,\s*|\s+/).filter((item) => (item != "") && (item)); };
+    const payload = {
+      "location-ids": parser(stores),
+      "SKUs": parser(products)
+    }
+    return Axios.post(`${boomiAPI.endpoint.uri}/ws/simple/getProductAvailability`, payload)
+      .then(response => response.data);
   }
   
   useEffect(() => {
     load(loader);
   }, []);
 
+  function getProductsAsObject(store: StoreStockLevel): Record<string, number> {
+    const addProduct = (products_obj: Record<string, number>, item: StockLevel) => {
+      products_obj[item["product-code"]] = item["quantity"];
+      return products_obj;
+    }
+    return (store.availability || []).reduce(addProduct, {});
+  }
 
   const data = React.useMemo(() => {
-    if (response && !error) {
-      const SoH = response?.results.map((store: StoreStockLevel) => {
-        return { 
-          storeID: store["location-id"],
-          storeName: store["location-name"],
-          ...(store.availability || []).reduce((obj: Record<string, number>, item: StockLevel) => {
-            obj[item["product-code"]] = item["quantity"];
-            return obj;
-          }, {})
-        };
-      })
-      return SoH;
-    }
-    return [ {msg: "Something went wrong."}, ];
+    if (error || !response)
+      return [ {msg: "Something went wrong."}, ];
+    
+    return response?.results.map((store: StoreStockLevel) => {
+      return { 
+        storeID: store["location-id"],
+        storeName: store["location-name"],
+        ...getProductsAsObject(store)
+      };
+    });
   }, [response]);
 
   const columns = React.useMemo(() => {
-    const base = [ { Header: 'Store ID', accessor: 'storeID' }, { Header: 'Store Name', accessor: 'storeName' } ];
-    if (response && !error) {
-      const products = new Set();
-      for (const store of response?.results) {
-        for (const item of store.availability || []) {
-          products.add(item["product-code"]);
-        }
-      }
+    if (error || !response)
+      return headers([ ["Error / Message", "msg"] ], data);
 
-      for (const item of products.keys()) {
-        base.push({ Header: item as string, accessor: item as string });
-      }
-      return base;
+    const base = [ 
+      ['Store ID', 'storeID'],
+      ['Store Name', 'storeName']
+    ];
+    const products = new Set<string>();
+    for (const store of response?.results) {
+      Object.keys(getProductsAsObject(store)).forEach(sku => products.add(sku));
     }
 
-    return [ { Header: "Error / Message", accesor: "msg" } ];
+    for (const item of products.keys()) {
+      base.push([ item as string, item as string ]);
+    }
+    return headers(base, data);
   }, [response]);
 
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    load(loader);
-    e.preventDefault();
-  };
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => { load(loader); e.preventDefault(); };
+  const onChangeStores: React.FormEventHandler<HTMLInputElement> = (e) => { setStores(e.currentTarget.value); };
+  const onChangeProducts: React.FormEventHandler<HTMLInputElement> = (e) => { setProducts(e.currentTarget.value); };
 
-  const onChangeStores: React.FormEventHandler<HTMLInputElement> = (e) => {
-    setStores(e.currentTarget.value);
-  }
-  const onChangeProducts: React.FormEventHandler<HTMLInputElement> = (e) => {
-    setProducts(e.currentTarget.value);
-  };
-
-  const a =  Axios.isAxiosError(error) ? error.response?.data?.toString() : "No detailed error message from the server.";
-  console.log(a)
+  // const a = Axios.isAxiosError(error) ? error.response?.data?.toString() : "No detailed error message from the server.";
+  // console.log(a)
   return (
     <Implementation name="Stock Lookup">
       <form onSubmit={onSubmit} style={{margin: "auto", maxWidth: "20rem"}}>
@@ -109,9 +98,9 @@ const StockLookup: FC = () => {
       </form>
       <br/>
       {isLoading ? 
-        <h2 className={utilStyles.headingMd}>Loading your data...</h2>
+        <Loading/>
       : response !== undefined ?
-        <Table columns={columns} data={data} style={{margin: "auto", maxWidth: "100%"}}/>
+        <Table columns={columns} data={data} getRowProps={() => ({})} style={{margin: "auto", maxWidth: "100%"}}/>
         :
         <><h2 className={utilStyles.headingMd}>Error: {error?.toString()}</h2><IFrame content={Axios.isAxiosError(error) ? error.response?.data?.toString() : "No detailed error message from the server."} style={{ background: "white", width: "100%"}}></IFrame></>
       }
