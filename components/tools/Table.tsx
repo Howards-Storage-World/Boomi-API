@@ -4,7 +4,7 @@ import { useTable, useSortBy, useBlockLayout, useResizeColumns, Column } from 'r
 
 import styles from "@components/tools/Table.module.css";
 
-const Table: FC<{ columns: Column<any>[], data: any[], style: React.CSSProperties } > = ({ columns, data, style = {} }) => {
+const Table: FC<{ columns: Column<any>[], data: any[], style: React.CSSProperties, getRowProps: (row: any) => any } > = ({ columns, data, style = {}, getRowProps = () => null  }) => {
     const {
       getTableProps,
       getTableBodyProps,
@@ -38,7 +38,6 @@ const Table: FC<{ columns: Column<any>[], data: any[], style: React.CSSPropertie
                         : ' 🔼'
                       : ''}
                     </span>
-                  {/* Add a sort direction indicator */}
                   <span>
                     
                   </span>
@@ -58,10 +57,10 @@ const Table: FC<{ columns: Column<any>[], data: any[], style: React.CSSPropertie
             (row) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}  className={styles.tr}>
+                <tr {...row.getRowProps(getRowProps(row))} className={styles.tr}>
                   {row.cells.map(cell => {
                     return (
-                      <td {...cell.getCellProps()}  className={styles.td}>{cell.render('Cell')}</td>
+                      <td {...cell.getCellProps()} className={styles.td}>{cell.render('Cell')}</td>
                     )
                   })}
                 </tr>
@@ -71,5 +70,27 @@ const Table: FC<{ columns: Column<any>[], data: any[], style: React.CSSPropertie
       </table>
     )
 }
+
+const getColumnWidth = (rows: any[], accessor: string | number, headerText: string | any[]) => {
+  const maxWidth = 800;
+  const magicSpacing = 15;
+  
+  const cellLength = Math.max(
+    ...rows.map(row => (`${row[accessor]}` || '').length),
+    headerText.length,
+  );
+  return Math.min(maxWidth, cellLength * magicSpacing);
+}
+
+export const headers: (columns: any[][], data: any[]) => Column<any>[] = (columns, data) => {
+  return columns.map(([heading, accessor, width]) => {
+    return {
+      Header: heading,
+      id: heading,
+      accessor: accessor,
+      width: width || getColumnWidth(data, accessor, heading),
+    }
+  });
+};
 
 export default Table;

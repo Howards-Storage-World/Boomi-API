@@ -2,39 +2,49 @@
 
 /* Table Rounding */
 .table {
-    display: inline-table;
+    /* display: inline-table; */
     border-spacing: 0;
 }
 
 .table .thead   {
     display: block;
     background: hsl(240, 5%, 15%);
-    border: 1px solid whitesmoke;
+    /* border: 1px solid whitesmoke;
     border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-right-radius: 10px; */
 }
 
-.table .tbody   {
+.table .tbody  {
     display: block;
+}
+
+/* Normal Table Cell Divider (Right Side) */
+.table > .tbody .tr > .td, .table > .thead > .tr > .th { border-right: 1px solid whitesmoke; }
+/* Normal Table Cell Divider (Right Side) exception for last cell in row */
+.table > .tbody .tr > .td:last-of-type, .table > .thead > .tr > .th:last-of-type { border-right: none; }
+
+/* Row Borders */
+.table > .tbody > .tr, .table > .thead > .tr {
+    position: relative;
     border-bottom: 1px solid whitesmoke;
     border-left: 1px solid whitesmoke;
     border-right: 1px solid whitesmoke;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+}
+/* Top Row (Header) Borders */
+.table > .thead > .tr:first-of-type {
+    border-top: 1px solid whitesmoke;
 }
 
-.table .tr .td, .table .tr .th {
-    border-right: 1px solid whitesmoke;
-}
-.table .tr .td:last-of-type, .table .tr .th:last-of-type {
-    border: none;
-}
+/* Bottom Corner Rounding */
+.table > .tbody > .tr:last-of-type { border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+/* Top Corner Rounding */
+.table > .thead > .tr:last-of-type { border-top-left-radius: 10px; border-top-right-radius: 10px; }
 
-.table .tbody .tr {
-    border-bottom: 1px solid whitesmoke;
+.table > .tbody > .tr {
+    opacity: 0.7;
 }
-.table .tbody .tr:last-of-type {
-    border: none;
+.table > .tbody > .tr:hover {
+    opacity: 1;
 }
 
 .th, .td {
@@ -43,7 +53,11 @@
     position: relative;
 }
 
-.th .resizer, .td .resizer {
+.thead > .tr > .th > span {
+    transform: translateX(-7.5px);
+}
+
+.resizer {
     display: inline-block;
     background: blue;
     width: 10px;
