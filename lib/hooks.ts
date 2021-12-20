@@ -14,7 +14,7 @@ export function useLoad<ResponseType = string, ErrorType = string | Error>(): { 
       setError(undefined);
     } catch (error) {
       setLoading(false);
-      setError(error);
+      setError(error as ErrorType);
       setResponse(undefined);
     }
   }
