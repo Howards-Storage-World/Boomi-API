@@ -3,7 +3,7 @@ import XMLViewer from 'react-xml-viewer';
 import Axios, { AxiosResponse } from "axios";
 import Implementation from '@components/implementation';
 import IFrame from "@components/tools/iframe";
-import { useBoomiAPI } from "@components/tools/BoomiAPI";
+import { SelectBoomiEnvironment, useBoomiAPI } from "@components/tools/BoomiAPI";
 import { useLoad } from '@lib/hooks';
 import utilStyles from '@styles/utils.module.css';
 
@@ -40,6 +40,8 @@ const StockLookup: FC = () => {
   return (
     <Implementation name="Load Order">
       <form onSubmit={onSubmit} style={{margin: "auto", maxWidth: "20rem"}}>
+        <SelectBoomiEnvironment />
+        <br/>
         <label>Order ID: </label><input type="text" className={utilStyles.input} value={orderID} onChange={onChange(setOrderID)} placeholder="Store IDs seperated by spaces" /><br/>
         <input type="submit" className={utilStyles.input} value="Load Order" />
       </form>
