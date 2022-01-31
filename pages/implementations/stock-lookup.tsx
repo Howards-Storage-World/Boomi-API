@@ -62,7 +62,7 @@ const StockLookup: FC = () => {
         ...getProductsAsObject(store)
       };
     });
-  }, [response]);
+  }, [response, error]);
 
   const columns = React.useMemo(() => {
     if (error || !response)
@@ -81,14 +81,12 @@ const StockLookup: FC = () => {
       base.push([ item as string, item as string ]);
     }
     return headers(base, data);
-  }, [response]);
+  }, [response, error]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => { load(loader); e.preventDefault(); };
   const onChangeStores: React.FormEventHandler<HTMLInputElement> = (e) => { setStores(e.currentTarget.value); };
   const onChangeProducts: React.FormEventHandler<HTMLInputElement> = (e) => { setProducts(e.currentTarget.value); };
 
-  // const a = Axios.isAxiosError(error) ? error.response?.data?.toString() : "No detailed error message from the server.";
-  // console.log(a)
   return (
     <Implementation name="Stock Lookup">
       <form onSubmit={onSubmit} style={{margin: "auto", maxWidth: "20rem"}}>
@@ -104,7 +102,10 @@ const StockLookup: FC = () => {
       : response !== undefined ?
         <Table columns={columns} data={data} getRowProps={() => ({})} style={{margin: "auto", maxWidth: "100%"}}/>
         :
-        <><h2 className={utilStyles.headingMd}>Error: {error?.toString()}</h2><IFrame content={Axios.isAxiosError(error) ? error.response?.data?.toString() : "No detailed error message from the server."} style={{ background: "white", width: "100%"}}></IFrame></>
+        <>
+          <h2 className={utilStyles.headingMd}>Error:</h2>
+          <IFrame content={Axios.isAxiosError(error) ? (error.response?.data?.toString() || error.toString()) : "No detailed error message from the server."} style={{ background: "white", width: "100%"}}></IFrame>
+        </>
       }
       
     </Implementation>
